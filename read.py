@@ -7,7 +7,7 @@ from google.cloud.speech_v1p1beta1 import enums
 from google.cloud.speech_v1p1beta1 import types
 
 
-def read(file_name, result_file):
+def read(file_name, result_file, time=50):
     # Instantiates a client
     client = speech.SpeechClient()
 
@@ -27,10 +27,11 @@ def read(file_name, result_file):
     # Loads the audio into memory
     with io.open(file_name, 'rb') as audio_file:
         with io.open(result_file, 'w') as f:
-            read_file_byte = 44100 * 2 * 50
+            FILE_BYTE = 44100 * 2
+            read_byte = FILE_BYTE * time
 
             while True:
-                content = audio_file.read(read_file_byte)
+                content = audio_file.read(read_byte)
                 if not content:
                     break
                 audio = types.RecognitionAudio(content=content)
@@ -43,4 +44,4 @@ def read(file_name, result_file):
 
 
 if __name__ == "__main__":
-    read('multi.wav','test.txt')
+    read('multi.wav', 'test.txt')
